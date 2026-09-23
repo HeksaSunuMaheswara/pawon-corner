@@ -1,6 +1,6 @@
 # 🍳 Pawon Corner – Landing Page & Direct Order System
 
-Website landing page interaktif untuk usaha kuliner lokal **Pawon Corner** (Glogor Carik, Bali). Didesain untuk memberikan pengalaman pemesanan makanan online yang responsif, cepat, dan intuitif tanpa komisi platform.
+🌐 **Live Demo:** [https://pawon-corner.vercel.app/](https://pawon-corner.vercel.app/)
 
 ---
 
