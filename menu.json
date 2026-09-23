@@ -1,0 +1,30 @@
+[
+  {
+    "id": "p1",
+    "name": "Nasi Goreng Pawon Ayam",
+    "price": 25000,
+    "desc": "Nasi goreng khas Pawon Corner disajikan gurih dengan irisan daging ayam pilihan dan bumbu rempah spesial.",
+    "img": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "p2",
+    "name": "BakMie Goreng Pawon Ayam",
+    "price": 26000,
+    "desc": "Bakmie goreng kenyal ditumis dengan bumbu wok khas Pawon, telur, suwiran ayam, dan sayuran segar.",
+    "img": "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "p3",
+    "name": "Nasi Goreng Pawon Special",
+    "price": 32000,
+    "desc": "Porsi melimpah dengan ekstra telur mata sapi, topping ayam, sosis, dan kerupuk renyah.",
+    "img": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    "id": "p4",
+    "name": "Nasi Goreng Kampung",
+    "price": 22000,
+    "desc": "Nasi goreng racikan resep tradisional gurih alami dengan telur orak-arik dan irisan cabai khas.",
+    "img": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=500&q=80"
+  }
+]
