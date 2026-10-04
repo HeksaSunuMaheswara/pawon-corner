@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMenuData();
     updateUI();
     setupHeroSlider();
+    setupScrollObserver();
+    setupModalEvents();
 });
 
 // --- FETCH DATA MENU ---
@@ -19,11 +21,14 @@ async function fetchMenuData() {
         renderMenu();
     } catch (error) {
         console.error(error);
-        document.getElementById('menu-grid').innerHTML = `
-            <div class="col-span-full text-center py-8 text-rose-500 font-bold">
-                Gagal memuat daftar menu. Pastikan file menu.json tersedia.
-            </div>
-        `;
+        const menuGrid = document.getElementById('menu-grid');
+        if (menuGrid) {
+            menuGrid.innerHTML = `
+                <div class="col-span-full text-center py-8 text-rose-500 font-bold">
+                    Gagal memuat daftar menu. Pastikan file menu.json tersedia.
+                </div>
+            `;
+        }
     }
 }
 
@@ -34,6 +39,8 @@ function formatRupiah(number) {
 // --- RENDER MENU ---
 function renderMenu() {
     const grid = document.getElementById('menu-grid');
+    if (!grid) return;
+
     grid.innerHTML = menuData.map(item => `
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col justify-between">
             <div>
@@ -59,19 +66,39 @@ function openVariantModal(itemId) {
     
     activeItem = menuItem;
     document.getElementById('modal-item-title').innerText = menuItem.name;
-    document.getElementById('variant-modal').classList.remove('hidden');
-    document.getElementById('variant-modal').classList.add('flex');
+    const modal = document.getElementById('variant-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
 }
 
 function closeVariantModal() {
-    document.getElementById('variant-modal').classList.add('hidden');
-    document.getElementById('variant-modal').classList.remove('flex');
+    const modal = document.getElementById('variant-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
     activeItem = null;
+}
+
+function setupModalEvents() {
+    const modal = document.getElementById('variant-modal');
+    if (!modal) return;
+
+    // Close modal when clicking backdrop
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeVariantModal();
+    });
+
+    // Close modal on Escape key press
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeVariantModal();
+        }
+    });
 }
 
 function confirmAddVariant() {
     if (!activeItem) return;
-    const variant = document.getElementById('modal-variant-select').value;
+    const variantSelect = document.getElementById('modal-variant-select');
+    const variant = variantSelect ? variantSelect.value : 'Pedas Sedang';
     
     const existing = cart.find(c => c.id === activeItem.id && c.variant === variant);
     if (existing) {
@@ -87,6 +114,7 @@ function confirmAddVariant() {
 }
 
 function updateQty(index, change) {
+    if (!cart[index]) return;
     cart[index].qty += change;
     if (cart[index].qty <= 0) {
         cart.splice(index, 1);
@@ -108,37 +136,39 @@ function updateUI() {
     let totalQty = 0;
 
     if (cart.length === 0) {
-        cartList.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Keranjang belanja Anda masih kosong.</p>';
-        floatCart.classList.add('translate-y-32');
+        if (cartList) cartList.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Keranjang belanja Anda masih kosong.</p>';
+        if (floatCart) floatCart.classList.add('translate-y-32');
     } else {
-        cartList.innerHTML = '';
-        cart.forEach((item, idx) => {
-            const itemTotal = item.price * item.qty;
-            total += itemTotal;
-            totalQty += item.qty;
+        if (cartList) {
+            cartList.innerHTML = '';
+            cart.forEach((item, idx) => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                totalQty += item.qty;
 
-            cartList.innerHTML += `
-                <div class="flex items-center justify-between pt-3">
-                    <div>
-                        <h4 class="font-bold text-gray-800 text-sm">${item.name}</h4>
-                        <p class="text-xs text-gray-500">Varian: ${item.variant} | ${formatRupiah(item.price)}</p>
+                cartList.innerHTML += `
+                    <div class="flex items-center justify-between pt-3">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">${item.name}</h4>
+                            <p class="text-xs text-gray-500">Varian: ${item.variant} | ${formatRupiah(item.price)}</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button type="button" onclick="updateQty(${idx}, -1)" class="w-7 h-7 rounded-full bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition">-</button>
+                            <span class="font-bold text-sm">${item.qty}</span>
+                            <button type="button" onclick="updateQty(${idx}, 1)" class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 font-bold hover:bg-amber-200 transition">+</button>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-3">
-                        <button type="button" onclick="updateQty(${idx}, -1)" class="w-7 h-7 rounded-full bg-gray-100 text-gray-600 font-bold">-</button>
-                        <span class="font-bold text-sm">${item.qty}</span>
-                        <button type="button" onclick="updateQty(${idx}, 1)" class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 font-bold">+</button>
-                    </div>
-                </div>
-            `;
-        });
-        floatCart.classList.remove('translate-y-32');
+                `;
+            });
+        }
+        if (floatCart) floatCart.classList.remove('translate-y-32');
     }
 
     const formattedTotal = formatRupiah(total);
-    totalElem.innerText = formattedTotal;
-    floatTotal.innerText = formattedTotal;
-    navCount.innerText = totalQty;
-    floatQty.innerText = totalQty;
+    if (totalElem) totalElem.innerText = formattedTotal;
+    if (floatTotal) floatTotal.innerText = formattedTotal;
+    if (navCount) navCount.innerText = totalQty;
+    if (floatQty) floatQty.innerText = totalQty;
 }
 
 // --- PEMBAYARAN TOGGLE & CHECKOUT ---
@@ -149,11 +179,11 @@ function togglePaymentView(method) {
     if (method === 'QRIS') {
         btn.className = "w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-xl transition flex items-center justify-center space-x-2 mt-6";
         btn.innerHTML = `<i class="fa-solid fa-qrcode text-xl"></i><span>Lanjutkan Pembayaran QRIS</span>`;
-        qrisBox.classList.add('hidden');
+        if (qrisBox) qrisBox.classList.add('hidden');
     } else {
         btn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition flex items-center justify-center space-x-2 mt-6";
         btn.innerHTML = `<i class="fa-brands fa-whatsapp text-xl"></i><span>Kirim & Bayar via WhatsApp</span>`;
-        qrisBox.classList.add('hidden');
+        if (qrisBox) qrisBox.classList.add('hidden');
     }
 }
 
@@ -167,8 +197,11 @@ function handleCheckoutSubmit(e) {
     const selectedMethod = document.querySelector('input[name="pay-method"]:checked').value;
 
     if (selectedMethod === 'QRIS') {
-        document.getElementById('qris-box').classList.remove('hidden');
-        document.getElementById('qris-box').scrollIntoView({ behavior: 'smooth' });
+        const qrisBox = document.getElementById('qris-box');
+        if (qrisBox) {
+            qrisBox.classList.remove('hidden');
+            qrisBox.scrollIntoView({ behavior: 'smooth' });
+        }
     } else {
         // Direct WhatsApp
         const name = document.getElementById('cust-name').value;
@@ -208,13 +241,42 @@ function simulatePaymentSuccess() {
     localStorage.removeItem('pawon_cart_wa');
     cart = [];
     updateUI();
-    document.getElementById('qris-box').classList.add('hidden');
+    const qrisBox = document.getElementById('qris-box');
+    if (qrisBox) qrisBox.classList.add('hidden');
+}
+
+// --- INTERSECTION OBSERVER FOR ACTIVE NAV ---
+function setupScrollObserver() {
+    const sections = document.querySelectorAll('section, footer');
+    const navItems = document.querySelectorAll('.mobile-nav-item');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const currentId = entry.target.getAttribute('id');
+                navItems.forEach(item => {
+                    const sectionTarget = item.getAttribute('data-section');
+                    if (sectionTarget === currentId) {
+                        item.classList.remove('text-gray-500');
+                        item.classList.add('text-amber-600');
+                    } else {
+                        item.classList.remove('text-amber-600');
+                        item.classList.add('text-gray-500');
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.3 });
+
+    sections.forEach(section => observer.observe(section));
 }
 
 // --- HELPER UI ---
 function toggleMobileMenu() {
     const menu = document.getElementById('mobile-menu');
     const icon = document.getElementById('menu-icon');
+    if (!menu || !icon) return;
+    
     menu.classList.toggle('open');
     icon.className = menu.classList.contains('open') ? 'fa-solid fa-xmark text-xl' : 'fa-solid fa-bars text-xl';
 }
@@ -222,6 +284,8 @@ function toggleMobileMenu() {
 function toggleAddressInput(val) {
     const container = document.getElementById('address-container');
     const addressInput = document.getElementById('cust-address');
+    if (!container || !addressInput) return;
+
     if (val === 'Ambil Sendiri') {
         container.classList.add('hidden');
         addressInput.removeAttribute('required');
@@ -233,7 +297,10 @@ function toggleAddressInput(val) {
 
 function showToast(msg) {
     const toast = document.getElementById('toast');
-    document.getElementById('toast-message').innerText = msg;
+    const msgElem = document.getElementById('toast-message');
+    if (!toast || !msgElem) return;
+
+    msgElem.innerText = msg;
     toast.classList.remove('toast-enter');
     toast.classList.add('toast-show');
     setTimeout(() => {
