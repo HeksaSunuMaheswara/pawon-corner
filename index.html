@@ -30,10 +30,10 @@
                 <span class="text-xl font-bold text-amber-900 tracking-tight">Pawon Corner</span>
             </div>
             <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
-                <a href="#hero" class="hover:text-amber-600 transition">Beranda</a>
-                <a href="#menu" class="hover:text-amber-600 transition">Menu Pilihan</a>
-                <a href="#pemesanan" class="hover:text-amber-600 transition">Pembayaran</a>
-                <a href="#tentang" class="hover:text-amber-600 transition">Tentang Kami</a>
+                <a href="#hero" class="nav-link hover:text-amber-600 transition">Beranda</a>
+                <a href="#menu" class="nav-link hover:text-amber-600 transition">Menu Pilihan</a>
+                <a href="#pemesanan" class="nav-link hover:text-amber-600 transition">Pembayaran</a>
+                <a href="#tentang" class="nav-link hover:text-amber-600 transition">Tentang Kami</a>
             </nav>
             <div class="flex items-center space-x-3">
                 <a href="#pemesanan" class="relative bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-full font-medium text-sm flex items-center space-x-2 transition shadow-sm">
@@ -41,7 +41,7 @@
                     <span class="hidden sm:inline">Keranjang</span>
                     <span id="nav-cart-count" class="bg-amber-800 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
                 </a>
-                <button onclick="toggleMobileMenu()" class="md:hidden text-amber-900 focus:outline-none p-2 rounded-lg hover:bg-amber-50">
+                <button onclick="toggleMobileMenu()" aria-label="Buka Menu" class="md:hidden text-amber-900 focus:outline-none p-2 rounded-lg hover:bg-amber-50">
                     <i id="menu-icon" class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>
@@ -72,8 +72,8 @@
             <!-- Auto Slider Gambar -->
             <div class="relative flex justify-center">
                 <div class="relative w-full max-w-md h-72 sm:h-80 rounded-2xl shadow-2xl overflow-hidden border-4 border-white/20">
-                    <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&auto=format&fit=crop" class="slide-img active">
-                    <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&auto=format&fit=crop" class="slide-img">
+                    <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&auto=format&fit=crop" alt="Nasi Goreng Pawon" class="slide-img active">
+                    <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&auto=format&fit=crop" alt="Bakmie Pawon" class="slide-img">
                 </div>
             </div>
         </div>
@@ -109,22 +109,22 @@
             <!-- Checkout Form -->
             <form id="order-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Nama Lengkap *</label>
+                    <label for="cust-name" class="block text-xs font-bold uppercase text-gray-600 mb-1">Nama Lengkap *</label>
                     <input type="text" id="cust-name" required placeholder="Contoh: Budi Prasetyo" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-amber-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Nomor WhatsApp *</label>
+                    <label for="cust-phone" class="block text-xs font-bold uppercase text-gray-600 mb-1">Nomor WhatsApp *</label>
                     <input type="tel" id="cust-phone" required placeholder="081234567890" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-amber-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Opsi Pengambilan *</label>
+                    <label for="cust-option" class="block text-xs font-bold uppercase text-gray-600 mb-1">Opsi Pengambilan *</label>
                     <select id="cust-option" onchange="toggleAddressInput(this.value)" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm">
                         <option value="Diantar">Diantar ke Alamat (Delivery)</option>
                         <option value="Ambil Sendiri">Ambil Sendiri (Takeaway)</option>
                     </select>
                 </div>
                 <div id="address-container">
-                    <label class="block text-xs font-bold uppercase text-gray-600 mb-1">Alamat Lengkap *</label>
+                    <label for="cust-address" class="block text-xs font-bold uppercase text-gray-600 mb-1">Alamat Lengkap *</label>
                     <textarea id="cust-address" rows="2" placeholder="Jl. Glogor Carik No. X..." class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"></textarea>
                 </div>
 
@@ -156,7 +156,7 @@
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PawonCornerPayment" alt="QRIS Code" class="rounded-xl border border-gray-300 p-2 bg-white">
                 </div>
                 <p class="text-xs text-gray-500">Buka aplikasi e-wallet / m-banking kamu dan lakukan scan QR di atas.</p>
-                <button onclick="simulatePaymentSuccess()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm">
+                <button type="button" onclick="simulatePaymentSuccess()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">
                     Konfirmasi Sudah Bayar
                 </button>
             </div>
@@ -179,21 +179,21 @@
         </div>
     </footer>
 
-    <!-- Mobile Bottom Nav -->
+    <!-- Mobile Bottom Nav (Perbaikan Warna Uniform) -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-amber-100 py-2.5 px-6 flex justify-between items-center z-40 md:hidden shadow-lg">
-        <a href="#hero" class="flex flex-col items-center text-gray-500 hover:text-amber-600">
+        <a href="#hero" data-section="hero" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-amber-600 transition">
             <i class="fa-solid fa-house text-lg"></i>
             <span class="text-[10px] font-medium mt-0.5">Beranda</span>
         </a>
-        <a href="#menu" class="flex flex-col items-center text-gray-500 hover:text-amber-600">
+        <a href="#menu" data-section="menu" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-amber-600 transition">
             <i class="fa-solid fa-utensils text-lg"></i>
             <span class="text-[10px] font-medium mt-0.5">Menu</span>
         </a>
-        <a href="#pemesanan" class="flex flex-col items-center text-amber-600">
+        <a href="#pemesanan" data-section="pemesanan" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-amber-600 transition">
             <i class="fa-solid fa-credit-card text-lg"></i>
             <span class="text-[10px] font-medium mt-0.5">Pembayaran</span>
         </a>
-        <a href="#tentang" class="flex flex-col items-center text-gray-500 hover:text-amber-600">
+        <a href="#tentang" data-section="tentang" class="mobile-nav-item flex flex-col items-center text-gray-500 hover:text-amber-600 transition">
             <i class="fa-solid fa-circle-info text-lg"></i>
             <span class="text-[10px] font-medium mt-0.5">Tentang</span>
         </a>
@@ -210,19 +210,19 @@
 
     <!-- Modal Varian -->
     <div id="variant-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
             <h3 id="modal-item-title" class="font-bold text-lg text-gray-900">Pilih Varian</h3>
             <div>
-                <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Tingkat Kepedasan:</label>
-                <select id="modal-variant-select" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+                <label for="modal-variant-select" class="block text-xs font-bold uppercase text-gray-500 mb-2">Tingkat Kepedasan:</label>
+                <select id="modal-variant-select" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-amber-500">
                     <option value="Pedas Sedang">Pedas Sedang</option>
                     <option value="Pedas Banget">Pedas Banget</option>
                     <option value="Tidak Pedas">Tidak Pedas / Manis</option>
                 </select>
             </div>
             <div class="flex space-x-2 pt-2">
-                <button onclick="closeVariantModal()" class="w-1/2 bg-gray-100 py-2.5 rounded-xl font-medium text-sm">Batal</button>
-                <button onclick="confirmAddVariant()" class="w-1/2 bg-amber-500 text-white py-2.5 rounded-xl font-medium text-sm">Tambahkan</button>
+                <button type="button" onclick="closeVariantModal()" class="w-1/2 bg-gray-100 hover:bg-gray-200 py-2.5 rounded-xl font-medium text-sm transition">Batal</button>
+                <button type="button" onclick="confirmAddVariant()" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white py-2.5 rounded-xl font-medium text-sm transition">Tambahkan</button>
             </div>
         </div>
     </div>
